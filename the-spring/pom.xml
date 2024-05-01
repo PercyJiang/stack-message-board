@@ -85,7 +85,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.percy.Main</mainClass>
+                            <mainClass>com.msg.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

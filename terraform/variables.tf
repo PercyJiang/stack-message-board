@@ -18,5 +18,5 @@ variable "ec2_rsa_key_name" { default = "test_key_pair" }
 
 # ecs
 variable "ecs_container_name" { default = "msg_container" }
-variable "ecs_image_name" { default = "jiangpercy666/docker-java-jar:latest" }
+variable "ecs_image_name" { default = "jiangpercy666/message-board-java:latest" }
 variable "ecs_task_desired_count" { default = 1 }
