@@ -11,3 +11,6 @@ spring:
     locations: "db.migration"
     user: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  graphql:
+    graphiql:
+      enabled: true

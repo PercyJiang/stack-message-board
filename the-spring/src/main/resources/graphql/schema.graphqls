@@ -1,0 +1,10 @@
+type Message {
+    id: ID
+    source: String
+    content: String
+    created: String
+}
+
+type Query {
+    graphGetAll: [Message]
+}
