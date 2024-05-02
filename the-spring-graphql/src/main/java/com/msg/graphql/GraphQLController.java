@@ -1,7 +1,7 @@
 package com.msg.graphql;
 
-import com.msg.graphql.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
@@ -20,5 +20,11 @@ public class GraphQLController {
   @QueryMapping
   public List<Message> graphGetAll() {
     return messageService.getAll();
+  }
+
+  @QueryMapping
+  public Book bookById(@Argument("id") String id) {
+    System.out.println("percy: controller");
+    return Book.getById(id);
   }
 }
