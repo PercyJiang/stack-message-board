@@ -23,8 +23,6 @@ public class Book {
             new Book("book-1", "Harry Potter and the Philosopher's Stone"),
             new Book("book-2", "Moby Dick"),
             new Book("book-3", "Interview with the vampire"));
-
-    System.out.println("percy: record");
     return books.stream().filter(book -> book.getId().equals(id)).findFirst().orElse(null);
   }
 }

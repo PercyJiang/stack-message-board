@@ -24,7 +24,6 @@ public class GraphQLController {
 
   @QueryMapping
   public Book bookById(@Argument("id") String id) {
-    System.out.println("percy: controller");
     return Book.getById(id);
   }
 }

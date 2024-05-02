@@ -1,8 +1,16 @@
 type Query {
     bookById(id: ID): Book
+    graphGetAll: [Message]
 }
 
 type Book {
     id: ID
     name: String
+}
+
+type Message {
+    id: ID
+    source: String
+    content: String
+    created: String
 }
