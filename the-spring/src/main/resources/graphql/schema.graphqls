@@ -8,3 +8,7 @@ type Message {
 type Query {
     graphGetAll: [Message]
 }
+
+type Mutation {
+    graphPost(source: String, content: String): Int
+}
