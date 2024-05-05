@@ -24,6 +24,7 @@ public class MessageController {
 
   @GetMapping(value = "/getAll")
   public ResponseEntity<List<Message>> getAll() {
+    System.out.println("percy: getAll");
     List<Message> response = messageService.getAll();
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
@@ -33,6 +34,7 @@ public class MessageController {
       consumes = {MediaType.APPLICATION_JSON_VALUE},
       produces = {MediaType.APPLICATION_JSON_VALUE})
   public ResponseEntity<Integer> create(@RequestBody Message message) {
+    System.out.println("percy: create");
     int response = messageService.create(message.getSource(), message.getContent());
     return new ResponseEntity<>(response, HttpStatus.CREATED);
   }

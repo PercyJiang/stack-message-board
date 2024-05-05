@@ -20,11 +20,13 @@ public class MessageGraphQL {
 
   @QueryMapping
   public List<Message> graphGetAll() {
+    System.out.println("percy: graphGetAll");
     return messageService.getAll();
   }
 
   @MutationMapping
   public Integer graphPost(@Argument("source") String source, @Argument("content") String content) {
+    System.out.println("percy: graphPost");
     return messageService.create(source, content);
   }
 }

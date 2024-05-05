@@ -18,9 +18,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import { getAll, post } from "./service/Axios";
 import { Message } from "./types";
+import { ApiMode, GRAPHQL_PATH } from "./constants";
+import { Variables, request } from "graphql-request";
+import { graphGetAll, graphGetAllResponse, graphPost } from "./service/GraphQL";
 
 function App() {
   const baseURL: string = "http://localhost:8080";
+  const apiMode: ApiMode = ApiMode.GRAPHQL;
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [messageList, setMessageList] = useState<Message[] | undefined>(
@@ -31,8 +35,16 @@ function App() {
 
   async function fetchMessageList(): Promise<void> {
     try {
-      const response: Message[] = await getAll(baseURL);
-      setMessageList(response);
+      if (apiMode === ApiMode.REST) {
+        const response: Message[] = await getAll(baseURL);
+        setMessageList(response);
+      } else {
+        const response: graphGetAllResponse = await request(
+          baseURL + GRAPHQL_PATH,
+          graphGetAll
+        );
+        setMessageList(response.graphGetAll);
+      }
       setIsLoading(false);
     } catch (err: any) {
       console.error("percy: error: ", err);
@@ -43,20 +55,28 @@ function App() {
   async function sendMessage(): Promise<void> {
     setIsLoading(true);
     try {
-      const message: Message = {
-        source: source,
-        content: content,
-      };
-      await post(baseURL, message);
+      if (apiMode === ApiMode.REST) {
+        await post(baseURL, {
+          source: source,
+          content: content,
+        } as Message);
+      } else {
+        await request(baseURL + GRAPHQL_PATH, graphPost, {
+          source: source,
+          content: content,
+        } as Variables);
+      }
       fetchMessageList();
       setContent("");
     } catch (err: any) {
       console.error("percy: error: ", err);
+      setIsLoading(false);
     }
   }
 
   useEffect(() => {
     fetchMessageList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -72,8 +92,8 @@ function App() {
           <TableRow>
             <TableCell>SOURCE</TableCell>
             <TableCell>CONTENT</TableCell>
-            <TableCell align="right">edit</TableCell>
-            <TableCell align="right">delete</TableCell>
+            <TableCell align="right">EDIT</TableCell>
+            <TableCell align="right">DELETE</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
