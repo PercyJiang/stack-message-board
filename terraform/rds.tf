@@ -1,4 +1,4 @@
-resource "aws_rds_cluster" "msg_rds_cluster" {
+resource "aws_rds_cluster" "percy_rds_cluster" {
   count = local.deploy_rds ? 1 : 0
 
   # id
@@ -8,7 +8,7 @@ resource "aws_rds_cluster" "msg_rds_cluster" {
   # spec
   engine              = var.rds_engine
   engine_version      = var.rds_engine_version
-  availability_zones  = var.az_list
+  availability_zones  = slice(var.az_list, 0, 3)
   skip_final_snapshot = true
 
   # master db user
@@ -16,13 +16,13 @@ resource "aws_rds_cluster" "msg_rds_cluster" {
   master_password = "${var.rds_dbname}_master_password"
 }
 
-resource "aws_rds_cluster_instance" "msg_rds_instance" {
+resource "aws_rds_cluster_instance" "percy_rds_instance" {
   count      = local.deploy_rds ? 1 : 0
-  depends_on = [aws_rds_cluster.msg_rds_cluster]
+  depends_on = [aws_rds_cluster.percy_rds_cluster]
 
   # id
   identifier         = var.rds_instance_identifier
-  cluster_identifier = aws_rds_cluster.msg_rds_cluster[0].id
+  cluster_identifier = aws_rds_cluster.percy_rds_cluster[0].id
 
   # spec
   engine         = var.rds_engine

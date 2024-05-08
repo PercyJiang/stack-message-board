@@ -1,0 +1,190 @@
+{
+  "format_version": "1.0",
+  "terraform_version": "1.7.5",
+  "values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "data.aws_caller_identity.current",
+          "mode": "data",
+          "type": "aws_caller_identity",
+          "name": "current",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "account_id": "944706097727",
+            "arn": "arn:aws:iam::944706097727:user/jiangpercy",
+            "id": "944706097727",
+            "user_id": "AIDA5X5G7CI77TCV3BXPO"
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "data.aws_region.current",
+          "mode": "data",
+          "type": "aws_region",
+          "name": "current",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "description": "US East (N. Virginia)",
+            "endpoint": "ec2.us-east-1.amazonaws.com",
+            "id": "us-east-1",
+            "name": "us-east-1"
+          },
+          "sensitive_values": {}
+        },
+        {
+          "address": "data.aws_subnets.private_subnets",
+          "mode": "data",
+          "type": "aws_subnets",
+          "name": "private_subnets",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "filter": [
+              { "name": "vpc-id", "values": ["vpc-00f9ffc4488fd0ac6"] }
+            ],
+            "id": "us-east-1",
+            "ids": [],
+            "tags": { "Tier": "Private" },
+            "timeouts": null
+          },
+          "sensitive_values": {
+            "filter": [{ "values": [false] }],
+            "ids": [],
+            "tags": {}
+          }
+        },
+        {
+          "address": "data.aws_subnets.public_subnets",
+          "mode": "data",
+          "type": "aws_subnets",
+          "name": "public_subnets",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "filter": [
+              { "name": "vpc-id", "values": ["vpc-00f9ffc4488fd0ac6"] }
+            ],
+            "id": "us-east-1",
+            "ids": [],
+            "tags": { "Tier": "Public" },
+            "timeouts": null
+          },
+          "sensitive_values": {
+            "filter": [{ "values": [false] }],
+            "ids": [],
+            "tags": {}
+          }
+        },
+        {
+          "address": "data.aws_vpc.default_vpc",
+          "mode": "data",
+          "type": "aws_vpc",
+          "name": "default_vpc",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "arn": "arn:aws:ec2:us-east-1:944706097727:vpc/vpc-00f9ffc4488fd0ac6",
+            "cidr_block": "172.31.0.0/16",
+            "cidr_block_associations": [
+              {
+                "association_id": "vpc-cidr-assoc-0eee034396ae28ff6",
+                "cidr_block": "172.31.0.0/16",
+                "state": "associated"
+              }
+            ],
+            "default": true,
+            "dhcp_options_id": "dopt-0719404493d996fe4",
+            "enable_dns_hostnames": true,
+            "enable_dns_support": true,
+            "enable_network_address_usage_metrics": false,
+            "filter": null,
+            "id": "vpc-00f9ffc4488fd0ac6",
+            "instance_tenancy": "default",
+            "ipv6_association_id": "",
+            "ipv6_cidr_block": "",
+            "main_route_table_id": "rtb-0795c2216f390e09c",
+            "owner_id": "944706097727",
+            "state": null,
+            "tags": {},
+            "timeouts": null
+          },
+          "sensitive_values": { "cidr_block_associations": [{}], "tags": {} }
+        },
+        {
+          "address": "aws_s3_bucket.jiangpercy_test_bucket[0]",
+          "mode": "managed",
+          "type": "aws_s3_bucket",
+          "name": "jiangpercy_test_bucket",
+          "index": 0,
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "acceleration_status": "",
+            "acl": null,
+            "arn": "arn:aws:s3:::jiangpercy-test-bucket",
+            "bucket": "jiangpercy-test-bucket",
+            "bucket_domain_name": "jiangpercy-test-bucket.s3.amazonaws.com",
+            "bucket_prefix": "",
+            "bucket_regional_domain_name": "jiangpercy-test-bucket.s3.us-east-1.amazonaws.com",
+            "cors_rule": [],
+            "force_destroy": false,
+            "grant": [
+              {
+                "id": "48bce55062b1c1af3d0d465e2670066098162dcb196f3f144c2c74b7e6e4ef1b",
+                "permissions": ["FULL_CONTROL"],
+                "type": "CanonicalUser",
+                "uri": ""
+              }
+            ],
+            "hosted_zone_id": "Z3AQBSTGFYJSTF",
+            "id": "jiangpercy-test-bucket",
+            "lifecycle_rule": [],
+            "logging": [],
+            "object_lock_configuration": [],
+            "object_lock_enabled": false,
+            "policy": "",
+            "region": "us-east-1",
+            "replication_configuration": [],
+            "request_payer": "BucketOwner",
+            "server_side_encryption_configuration": [
+              {
+                "rule": [
+                  {
+                    "apply_server_side_encryption_by_default": [
+                      { "kms_master_key_id": "", "sse_algorithm": "AES256" }
+                    ],
+                    "bucket_key_enabled": false
+                  }
+                ]
+              }
+            ],
+            "tags": null,
+            "tags_all": {},
+            "timeouts": null,
+            "versioning": [{ "enabled": false, "mfa_delete": false }],
+            "website": [],
+            "website_domain": null,
+            "website_endpoint": null
+          },
+          "sensitive_values": {
+            "cors_rule": [],
+            "grant": [{ "permissions": [false] }],
+            "lifecycle_rule": [],
+            "logging": [],
+            "object_lock_configuration": [],
+            "replication_configuration": [],
+            "server_side_encryption_configuration": [
+              { "rule": [{ "apply_server_side_encryption_by_default": [{}] }] }
+            ],
+            "tags_all": {},
+            "versioning": [{}],
+            "website": []
+          }
+        }
+      ]
+    }
+  }
+}

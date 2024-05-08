@@ -1,11 +1,10 @@
 locals {
-  account_number = "992382707788"
-
   region_primary   = "us-east-1"
   region_secondary = "us-west-2"
 
-  deploy_rds = true
-  deploy_ecs = true
+  deploy_rds = false
+  deploy_ecs = false
+  deploy_eks = true
 }
 
 provider "aws" {

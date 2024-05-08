@@ -1,7 +1,7 @@
-resource "aws_ecs_cluster" "msg_ecs_cluster" {
+resource "aws_ecs_cluster" "percy_ecs_cluster" {
   count = local.deploy_ecs ? 1 : 0
 
-  name = "msg_ecs_cluster"
+  name = "percy_ecs_cluster"
 
   setting {
     name  = "containerInsights"
@@ -9,11 +9,11 @@ resource "aws_ecs_cluster" "msg_ecs_cluster" {
   }
 }
 
-resource "aws_ecs_task_definition" "msg_ecs_task_definition" {
+resource "aws_ecs_task_definition" "percy_ecs_task_definition" {
   count      = local.deploy_ecs ? 1 : 0
-  depends_on = [aws_rds_cluster.msg_rds_cluster]
+  depends_on = [aws_rds_cluster.percy_rds_cluster]
 
-  family = "msg_ecs_task_family"
+  family = "percy_ecs_task_family"
   container_definitions = jsonencode([
     {
       name      = var.ecs_container_name
@@ -31,7 +31,7 @@ resource "aws_ecs_task_definition" "msg_ecs_task_definition" {
       environment = [
         {
           name  = "DB_HOST"
-          value = aws_rds_cluster.msg_rds_cluster[0].endpoint
+          value = aws_rds_cluster.percy_rds_cluster[0].endpoint
         },
         {
           name  = "DB_PORT"
@@ -54,19 +54,19 @@ resource "aws_ecs_task_definition" "msg_ecs_task_definition" {
   ])
 }
 
-resource "aws_ecs_service" "msg_ecs_service" {
+resource "aws_ecs_service" "percy_ecs_service" {
   count = local.deploy_ecs ? 1 : 0
   depends_on = [
-    aws_rds_cluster.msg_rds_cluster,
-    aws_ecs_cluster.msg_ecs_cluster,
-    aws_ecs_task_definition.msg_ecs_task_definition,
-    aws_autoscaling_group.msg_asg
+    aws_rds_cluster.percy_rds_cluster,
+    aws_ecs_cluster.percy_ecs_cluster,
+    aws_ecs_task_definition.percy_ecs_task_definition,
+    aws_autoscaling_group.percy_asg
   ]
 
   # id
-  name            = "msg_ecs_service"
-  cluster         = aws_ecs_cluster.msg_ecs_cluster[0].id
-  task_definition = aws_ecs_task_definition.msg_ecs_task_definition[0].arn
+  name            = "percy_ecs_service"
+  cluster         = aws_ecs_cluster.percy_ecs_cluster[0].id
+  task_definition = aws_ecs_task_definition.percy_ecs_task_definition[0].arn
 
   # spec
   launch_type   = "EC2"

@@ -1,6 +1,6 @@
 # vpc
 variable "vpc_id" { default = "vpc-08acce998dcaee4ad" }
-variable "az_list" { default = ["us-east-1a", "us-east-1b", "us-east-1c"] }
+variable "az_list" { default = ["us-east-1a", "us-east-1b", "us-east-1c", "us-east-1d", "us-east-1e", "us-east-1f"] }
 
 # rds
 variable "rds_dbname" { default = "msgdb" }
@@ -17,6 +17,6 @@ variable "ec2_instance_type" { default = "t4g.small" }
 variable "ec2_rsa_key_name" { default = "test_key_pair" }
 
 # ecs
-variable "ecs_container_name" { default = "msg_container" }
+variable "ecs_container_name" { default = "percy_container" }
 variable "ecs_image_name" { default = "jiangpercy666/message-board-java:latest" }
 variable "ecs_task_desired_count" { default = 1 }
