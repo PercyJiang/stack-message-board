@@ -50,6 +50,26 @@ resource "aws_eks_cluster" "percy_eks_cluster" {
 }
 
 ####
+#### eks cluster addon
+####
+resource "aws_eks_addon" "percy_eks_addon_kube_proxy" {
+  count      = local.deploy_eks ? 1 : 0
+  depends_on = [aws_eks_cluster.percy_eks_cluster]
+
+  cluster_name  = aws_eks_cluster.percy_eks_cluster[0].name
+  addon_name    = "kube-proxy"
+  addon_version = "v1.29.3-eksbuild.2"
+}
+resource "aws_eks_addon" "percy_eks_addon_vpc_cni" {
+  count      = local.deploy_eks ? 1 : 0
+  depends_on = [aws_eks_cluster.percy_eks_cluster]
+
+  cluster_name  = aws_eks_cluster.percy_eks_cluster[0].name
+  addon_name    = "vpc-cni"
+  addon_version = "v1.18.1-eksbuild.3"
+}
+
+####
 #### eks worker node role
 ####
 resource "aws_iam_role" "percy_eks_worker_node_role" {
@@ -94,9 +114,9 @@ resource "aws_iam_policy" "eks_ebs_csi_driver_policy" {
   policy = file("${path.module}/policies/eks-ebs-csi-driver-policy.json")
 }
 resource "aws_iam_role_policy_attachment" "eks_ebs_csi_driver_policy" {
-  count      = local.deploy_eks ? 1 : 0
+  count = local.deploy_eks ? 1 : 0
   depends_on = [
-    aws_iam_role.percy_eks_worker_node_role, 
+    aws_iam_role.percy_eks_worker_node_role,
     aws_iam_policy.eks_ebs_csi_driver_policy
   ]
 
@@ -111,14 +131,31 @@ resource "aws_iam_policy" "eks_aws_lb_controller_policy" {
   policy = file("${path.module}/policies/eks-aws-lb-controller-policy.json")
 }
 resource "aws_iam_role_policy_attachment" "eks_aws_lb_controller_policy" {
-  count      = local.deploy_eks ? 1 : 0
+  count = local.deploy_eks ? 1 : 0
   depends_on = [
-    aws_iam_role.percy_eks_worker_node_role, 
+    aws_iam_role.percy_eks_worker_node_role,
     aws_iam_policy.eks_aws_lb_controller_policy
   ]
 
   role       = aws_iam_role.percy_eks_worker_node_role[0].name
   policy_arn = aws_iam_policy.eks_aws_lb_controller_policy[0].arn
+}
+resource "aws_iam_policy" "eks_ecr_policy" {
+  count      = local.deploy_eks ? 1 : 0
+  depends_on = [aws_iam_role.percy_eks_worker_node_role]
+
+  name   = "eks_ecr_policy"
+  policy = file("${path.module}/policies/eks-ecr-policy.json")
+}
+resource "aws_iam_role_policy_attachment" "eks_ecr_policy" {
+  count = local.deploy_eks ? 1 : 0
+  depends_on = [
+    aws_iam_role.percy_eks_worker_node_role,
+    aws_iam_policy.eks_ecr_policy
+  ]
+
+  role       = aws_iam_role.percy_eks_worker_node_role[0].name
+  policy_arn = aws_iam_policy.eks_ecr_policy[0].arn
 }
 resource "aws_iam_instance_profile" "percy_eks_worker_node_instance_profile" {
   count = local.deploy_eks ? 1 : 0
@@ -129,7 +166,8 @@ resource "aws_iam_instance_profile" "percy_eks_worker_node_instance_profile" {
     aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
     aws_iam_role_policy_attachment.AmazonSSMManagedInstanceCore,
     aws_iam_role_policy_attachment.eks_ebs_csi_driver_policy,
-    aws_iam_role_policy_attachment.eks_aws_lb_controller_policy
+    aws_iam_role_policy_attachment.eks_aws_lb_controller_policy,
+    aws_iam_role_policy_attachment.eks_ecr_policy
   ]
 
   name = "percy_eks_worker_node_instance_profile"
@@ -189,7 +227,7 @@ resource "aws_iam_instance_profile" "percy_eks_worker_node_instance_profile" {
 #   min_size           = 1
 # }
 
-# # ec2 launch template for eks node group
+# ec2 launch template for eks node group
 resource "aws_launch_template" "percy_ec2_launch_template_eks_node_group" {
   count      = local.deploy_eks ? 1 : 0
   depends_on = [aws_eks_cluster.percy_eks_cluster]
@@ -208,17 +246,22 @@ resource "aws_launch_template" "percy_ec2_launch_template_eks_node_group" {
   key_name               = var.ec2_rsa_key_name
 }
 
-# # node group
+# node group
 resource "aws_eks_node_group" "percy_eks_node_group" {
   count = local.deploy_eks ? 1 : 0
   depends_on = [
+    aws_eks_cluster.percy_eks_cluster,
+    aws_eks_addon.percy_eks_addon_kube_proxy,
+    aws_eks_addon.percy_eks_addon_vpc_cni,
     aws_iam_role.percy_eks_worker_node_role,
     aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
     aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy,
     aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
     aws_iam_role_policy_attachment.AmazonSSMManagedInstanceCore,
+    aws_iam_role_policy_attachment.eks_ebs_csi_driver_policy,
+    aws_iam_role_policy_attachment.eks_aws_lb_controller_policy,
+    aws_iam_role_policy_attachment.eks_ecr_policy,
     aws_launch_template.percy_ec2_launch_template_eks_node_group,
-    aws_eks_cluster.percy_eks_cluster
   ]
 
   # id
