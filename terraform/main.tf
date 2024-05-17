@@ -2,7 +2,7 @@ locals {
   region_primary   = "us-east-1"
   region_secondary = "us-west-2"
 
-  deploy_rds = false
+  deploy_rds = true
   deploy_ecs = false
   deploy_eks = true
 }

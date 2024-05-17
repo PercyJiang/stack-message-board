@@ -6,7 +6,12 @@
       "Resource": "*"
     },
     {
-      "Action": "ecr:GetAuthorizationToken*",
+      "Action": "eks:*",
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Action": "ec2:*",
       "Effect": "Allow",
       "Resource": "*"
     }

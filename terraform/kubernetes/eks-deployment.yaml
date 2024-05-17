@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: percy-eks-deployment
+  namespace: percy-eks-namespace
+  labels:
+    app: percy-eks-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: percy-eks-app
+  template:
+    metadata:
+      labels:
+        app: percy-eks-app
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: kubernetes.io/arch
+                    operator: In
+                    values:
+                      - amd64
+                      - arm64
+      containers:
+        - name: percy-container
+          image: jiangpercy666/message-board-java:latest
+          ports:
+            - name: http
+              containerPort: 8080
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DB_HOST
+              value: "percy-rds-cluster.cluster-cfc6gyuo0kfg.us-east-1.rds.amazonaws.com"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "percydb"
+            - name: DB_USERNAME
+              value: "percydb_master_username"
+            - name: DB_PASSWORD
+              value: "percydb_master_password"
+      nodeSelector:
+        kubernetes.io/os: linux
