@@ -174,59 +174,6 @@ resource "aws_iam_instance_profile" "percy_eks_worker_node_instance_profile" {
   role = aws_iam_role.percy_eks_worker_node_role[0].name
 }
 
-# # ec2 launch template for eks asg
-# resource "aws_launch_template" "percy_ec2_launch_template_eks_asg" {
-#   count      = local.deploy_eks ? 1 : 0
-#   depends_on = []
-
-#   # id
-#   name = "percy_ec2_launch_template_eks_asg"
-
-#   # spec
-#   image_id      = var.ec2_ami_id_eks
-#   instance_type = var.ec2_instance_type_eks
-
-#   # conn eks
-#   user_data = base64encode(data.cloudinit_config.ec2init_eks.rendered)
-
-#   iam_instance_profile {
-#     name = aws_iam_instance_profile.percy_eks_worker_node_instance_profile[0].name
-#   }
-
-#   # required for ssh
-#   vpc_security_group_ids = [var.security_group_id]
-#   key_name               = var.ec2_rsa_key_name
-# }
-
-# # ec2 asg
-# resource "aws_autoscaling_group" "percy_asg_eks" {
-#   count = local.deploy_eks ? 1 : 0
-#   depends_on = [
-#     aws_launch_template.percy_ec2_launch_template_eks_asg,
-#     aws_eks_cluster.percy_eks_cluster
-#   ]
-
-#   # id
-#   name = "percy_asg_eks"
-
-#   # conn ec2
-#   launch_template {
-#     id      = aws_launch_template.percy_ec2_launch_template_eks_asg[0].id
-#     version = "$Latest"
-#   }
-#   tag {
-#     key                 = "Name"
-#     value               = "percy_instance_name_eks"
-#     propagate_at_launch = true
-#   }
-
-#   # spec
-#   availability_zones = slice(var.az_list, 0, 3)
-#   desired_capacity   = 1
-#   max_size           = 1
-#   min_size           = 1
-# }
-
 # ec2 launch template for eks node group
 resource "aws_launch_template" "percy_ec2_launch_template_eks_node_group" {
   count      = local.deploy_eks ? 1 : 0
