@@ -1,3 +1,5 @@
+# http://localhost:8080/graphiql?path=/graphql
+
 type Message {
     id: ID
     source: String
@@ -8,7 +10,18 @@ type Message {
 type Query {
     graphGetAll: [Message]
 }
+#query graphGetAll {
+#    graphGetAll {
+#        id
+#        source
+#        content
+#        created
+#    }
+#}
 
 type Mutation {
     graphPost(source: String, content: String): Int
 }
+#mutation graphPost {
+#    graphPost(source: "ann", content: "hello world")
+#}
