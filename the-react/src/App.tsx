@@ -116,14 +116,12 @@ function App() {
         </TableBody>
       </Table>
       <TextField
-        id="outlined-basic"
         label="What is your name"
         variant="outlined"
         value={source}
         onChange={(e) => setSource(e.target.value)}
       />
       <TextField
-        id="outlined-basic"
         label="Type your message here"
         variant="outlined"
         value={content}

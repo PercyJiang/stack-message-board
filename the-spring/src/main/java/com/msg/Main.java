@@ -14,6 +14,7 @@ public class Main {
         System.out.println("percy: app started");
     }
 
+    @SuppressWarnings("unused")
     @PreDestroy
     public void onExit() {
         System.out.println("percy: app terminated");

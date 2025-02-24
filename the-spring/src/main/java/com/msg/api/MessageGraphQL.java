@@ -1,5 +1,7 @@
-package com.msg;
+package com.msg.api;
 
+import com.msg.MessageService;
+import com.msg.dto.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
