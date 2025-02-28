@@ -11,9 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Message {
+public class Client {
   private UUID id;
-  private String source;
-  private String content;
+  private String username;
+  private String password;
   private LocalDateTime created;
 }

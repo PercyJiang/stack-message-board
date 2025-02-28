@@ -1,0 +1,51 @@
+package com.msg.util;
+
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.InputMismatchException;
+import javax.crypto.SecretKey;
+import org.springframework.stereotype.Component;
+
+import static com.msg.constant.ErrorCode.*;
+
+@Component
+public class JwtUtil {
+
+  private static final String SECRET_KEY_STRING =
+      "your-secret-key-string-here-make-it-long-and-secure";
+  private final SecretKey secretKey =
+      Keys.hmacShaKeyFor(SECRET_KEY_STRING.getBytes(StandardCharsets.UTF_8));
+
+  public String generateToken(String username) {
+    long expirationTime = 1000 * 60 * 60 * 10; // 10 hours
+    return Jwts.builder()
+        .setSubject(username)
+        .setIssuedAt(new Date(System.currentTimeMillis()))
+        .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+        .signWith(secretKey)
+        .compact();
+  }
+
+  public void validateJwt(String header, String username) {
+    if (header == null || !header.startsWith("Bearer ")) {
+      throw new InputMismatchException(INVALID_HEADER);
+    }
+
+    try {
+      String token = header.substring(7);
+      JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(secretKey).build();
+      Jws<Claims> jws = jwtParser.parseClaimsJws(token);
+      String sub = jws.getBody().get("sub").toString();
+
+      if (!sub.equals(username)) {
+        throw new InputMismatchException(INVALID_USER);
+      }
+
+    } catch (JwtException | IllegalArgumentException e) {
+      throw new InputMismatchException(INVALID_TOKEN);
+    }
+  }
+}
