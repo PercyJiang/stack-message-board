@@ -1,12 +1,21 @@
 # message-board
 
-CRUD Operations
+## backend
 
-External API
+- Auth
 
-RDS, ECS, EC2, EKS
+- CRUD Operations
 
-Sprint + Java
-Djangao + Python
+- Spring Boot
 
-LMM
+- Django
+
+## cloud
+
+- RDS
+
+- ECS, EC2
+
+- EKS, EC2
+
+- LMM

@@ -3,6 +3,7 @@ package com.msg.api;
 import com.msg.util.JwtUtil;
 import com.msg.dto.Client;
 import com.msg.service.ClientService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "clients")
 @CrossOrigin
+@Tag(name = "Clients")
 public class ClientController {
 
   private final ClientService clientService;
