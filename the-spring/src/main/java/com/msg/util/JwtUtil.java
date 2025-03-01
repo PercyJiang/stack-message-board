@@ -1,16 +1,14 @@
 package com.msg.util;
 
+import static com.msg.constant.ErrorCode.*;
+
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.crypto.SecretKey;
-
 import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Component;
-
-import static com.msg.constant.ErrorCode.*;
 
 @Component
 public class JwtUtil {

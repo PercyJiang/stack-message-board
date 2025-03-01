@@ -1,14 +1,13 @@
 package com.msg.api;
 
-import com.msg.util.JwtUtil;
 import com.msg.dto.Message;
 import com.msg.service.MessageService;
-import java.util.List;
-import java.util.UUID;
-
+import com.msg.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import java.util.UUID;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,7 +35,8 @@ public class MessageController {
   @ApiResponse(responseCode = "200", description = "Successfully retrieved messages")
   @GetMapping(value = "/{username}/getAll")
   public ResponseEntity<List<Message>> getAll(
-      @RequestHeader("Authorization") String authorizationHeader, @PathVariable String username) throws BadRequestException {
+      @RequestHeader("Authorization") String authorizationHeader, @PathVariable String username)
+      throws BadRequestException {
     jwtUtil.validateJwt(authorizationHeader, username);
     List<Message> response = messageService.getAll();
     return new ResponseEntity<>(response, HttpStatus.OK);
@@ -51,7 +51,8 @@ public class MessageController {
   public ResponseEntity<Void> create(
       @RequestHeader("Authorization") String authorizationHeader,
       @PathVariable String username,
-      @RequestBody String content) throws BadRequestException {
+      @RequestBody String content)
+      throws BadRequestException {
     jwtUtil.validateJwt(authorizationHeader, username);
     int result = messageService.create(username, content);
     return result == 1
@@ -69,7 +70,8 @@ public class MessageController {
       @RequestHeader("Authorization") String authorizationHeader,
       @PathVariable String username,
       @PathVariable UUID id,
-      @RequestBody String content) throws BadRequestException {
+      @RequestBody String content)
+      throws BadRequestException {
     jwtUtil.validateJwt(authorizationHeader, username);
     int result = messageService.update(username, id, content);
     return result == 1
@@ -84,7 +86,8 @@ public class MessageController {
   public ResponseEntity<Void> delete(
       @RequestHeader("Authorization") String authorizationHeader,
       @PathVariable String username,
-      @PathVariable UUID id) throws BadRequestException {
+      @PathVariable UUID id)
+      throws BadRequestException {
     jwtUtil.validateJwt(authorizationHeader, username);
     int result = messageService.delete(username, id);
     return result == 1
