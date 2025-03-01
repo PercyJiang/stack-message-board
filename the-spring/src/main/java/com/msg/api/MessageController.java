@@ -9,6 +9,7 @@ import java.util.UUID;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,11 +32,11 @@ public class MessageController {
     this.jwtUtil = jwtUtil;
   }
 
-  @Operation(summary = "Get all messages", description = "Retrieves all messages for a user")
+  @Operation(summary = "Get all messages", description = "Retrieves all messages")
   @ApiResponse(responseCode = "200", description = "Successfully retrieved messages")
   @GetMapping(value = "/{username}/getAll")
   public ResponseEntity<List<Message>> getAll(
-      @RequestHeader("Authorization") String authorizationHeader, @PathVariable String username) {
+      @RequestHeader("Authorization") String authorizationHeader, @PathVariable String username) throws BadRequestException {
     jwtUtil.validateJwt(authorizationHeader, username);
     List<Message> response = messageService.getAll();
     return new ResponseEntity<>(response, HttpStatus.OK);
@@ -50,7 +51,7 @@ public class MessageController {
   public ResponseEntity<Void> create(
       @RequestHeader("Authorization") String authorizationHeader,
       @PathVariable String username,
-      @RequestBody String content) {
+      @RequestBody String content) throws BadRequestException {
     jwtUtil.validateJwt(authorizationHeader, username);
     int result = messageService.create(username, content);
     return result == 1
@@ -68,7 +69,7 @@ public class MessageController {
       @RequestHeader("Authorization") String authorizationHeader,
       @PathVariable String username,
       @PathVariable UUID id,
-      @RequestBody String content) {
+      @RequestBody String content) throws BadRequestException {
     jwtUtil.validateJwt(authorizationHeader, username);
     int result = messageService.update(username, id, content);
     return result == 1
@@ -83,7 +84,7 @@ public class MessageController {
   public ResponseEntity<Void> delete(
       @RequestHeader("Authorization") String authorizationHeader,
       @PathVariable String username,
-      @PathVariable UUID id) {
+      @PathVariable UUID id) throws BadRequestException {
     jwtUtil.validateJwt(authorizationHeader, username);
     int result = messageService.delete(username, id);
     return result == 1

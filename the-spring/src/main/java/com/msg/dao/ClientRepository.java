@@ -29,8 +29,8 @@ public class ClientRepository {
     }
   }
 
-  public Client getByUsername(String username) {
-    String query = "select * from client where username =?;";
-    return jdbcTemplate.queryForObject(query, USER_BEAN_MAPPER, username);
+  public Client get(String username, String password) {
+    String query = "select * from client where username =? and password =?;";
+    return jdbcTemplate.queryForObject(query, USER_BEAN_MAPPER, username, password);
   }
 }

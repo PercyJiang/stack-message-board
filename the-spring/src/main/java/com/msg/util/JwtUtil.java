@@ -5,8 +5,9 @@ import io.jsonwebtoken.security.Keys;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.InputMismatchException;
 import javax.crypto.SecretKey;
+
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Component;
 
 import static com.msg.constant.ErrorCode.*;
@@ -29,9 +30,9 @@ public class JwtUtil {
         .compact();
   }
 
-  public void validateJwt(String header, String username) {
+  public void validateJwt(String header, String username) throws BadRequestException {
     if (header == null || !header.startsWith("Bearer ")) {
-      throw new InputMismatchException(INVALID_HEADER);
+      throw new BadRequestException(INVALID_HEADER);
     }
 
     try {
@@ -41,11 +42,11 @@ public class JwtUtil {
       String sub = jws.getBody().get("sub").toString();
 
       if (!sub.equals(username)) {
-        throw new InputMismatchException(INVALID_USER);
+        throw new BadRequestException(INVALID_USER);
       }
 
     } catch (JwtException | IllegalArgumentException e) {
-      throw new InputMismatchException(INVALID_TOKEN);
+      throw new BadRequestException(INVALID_TOKEN);
     }
   }
 }

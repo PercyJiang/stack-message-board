@@ -1,6 +1,12 @@
 # message-board
 
-## backend
+## tech stack
+
+### frontend
+
+- React
+
+### backend
 
 - Auth
 
@@ -10,7 +16,7 @@
 
 - Django
 
-## cloud
+### cloud
 
 - RDS
 

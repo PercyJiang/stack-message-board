@@ -20,11 +20,7 @@ public class ClientService {
   }
 
   public boolean login(String username, String password) {
-    Client client = clientRepository.getByUsername(username);
-    return client != null
-        && client.getUsername() != null
-        && client.getPassword() != null
-        && client.getUsername().equals(username)
-        && client.getPassword().equals(password);
+    Client client = clientRepository.get(username, password);
+    return client != null && client.getUsername() != null && client.getPassword() != null;
   }
 }
