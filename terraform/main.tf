@@ -3,8 +3,8 @@ locals {
   region_secondary = "us-west-2"
 
   deploy_rds = true
-  deploy_ecs = false
-  deploy_eks = true
+  deploy_ecs = true
+  deploy_eks = false
 }
 
 provider "aws" {

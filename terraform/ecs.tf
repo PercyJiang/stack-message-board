@@ -116,7 +116,7 @@ resource "aws_launch_template" "percy_ec2_launch_template_ecs" {
   user_data = base64encode(data.cloudinit_config.ec2init_ecs.rendered)
 
   # required for ssh
-  vpc_security_group_ids = [var.security_group_id]
+  vpc_security_group_ids = data.aws_security_groups.default.ids
   key_name               = var.ec2_rsa_key_name
 }
 

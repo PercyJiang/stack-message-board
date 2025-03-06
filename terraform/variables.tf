@@ -1,6 +1,4 @@
 # vpc
-variable "vpc_id" { default = "vpc-08acce998dcaee4ad" }
-variable "security_group_id" { default = "sg-0a09b7f00e697cecc" }
 variable "az_list" { default = ["us-east-1a", "us-east-1b", "us-east-1c", "us-east-1d", "us-east-1e", "us-east-1f"] }
 
 # rds
@@ -14,8 +12,10 @@ variable "rds_port" { default = "5432" }
 
 # ec2
 variable "ec2_rsa_key_name" { default = "test_key_pair" }
-variable "ec2_ami_id_ecs" { default = "ami-057f57c2fcd14e5f4" }
-variable "ec2_instance_type_ecs" { default = "t2.small" }
+# Amazon Linux AMI 2023.0.20250224 x86_64 ECS HVM EBS
+variable "ec2_ami_id_ecs" { default = "ami-077cf7a7773c2d96f" }
+variable "ec2_instance_type_ecs" { default = "t2.medium" }
+# ubuntu 20.04
 variable "ec2_ami_id_eks" { default = "ami-049924d678af7a43b" }
 variable "ec2_instance_type_eks" { default = "t2.micro" }
 

@@ -1,13 +1,22 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
+data "aws_vpcs" "current" {}
 
-data "aws_vpc" "default_vpc" { id = var.vpc_id }
-data "aws_security_group" "default_security_group" {id = var.security_group_id }
+data "aws_security_groups" "default" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpcs.current.ids[0]]
+  }
+  filter {
+    name   = "group-name"
+    values = ["default"]
+  }
+}
 
 data "aws_subnets" "percy_subnets_ab" {
   filter {
     name   = "vpc-id"
-    values = [var.vpc_id]
+    values = [data.aws_vpcs.current.ids[0]]
   }
   filter {
     name   = "availability-zone"
