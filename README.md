@@ -52,7 +52,7 @@ ensure aws cli is logged in
 
 ### ecs
 
-1. in main.tf, set deploy_rds and deploy_ecs to true, other deploys to false
+1. in `main.tf`, set `deploy_rds` and `deploy_ecs` to true, other deploys to false
 
 2. run `terraform init`
 
