@@ -27,7 +27,7 @@
 3. create a local postgres database with docker like `docker run --name test_postgres --publish 5432:5432 --env POSTGRES_DB=test_postgres --env POSTGRES_USER=localuser --env POSTGRES_PASSWORD=localpassword --detach postgres:16.2
 `
 
-4. run the java app from intellij with the following environment 
+4. run the java app with the following environment 
 ```
 DB_HOST=localhost;
 DB_NAME=test_postgres;
