@@ -1,23 +1,30 @@
 import express, { Request, Response } from "express";
-import amqp from "amqplib";
+import amqp, { Channel } from "amqplib";
 import { RabbitMessageBody } from "./type";
 import { bytesToJson } from "./util";
+import { RedisClientType } from "redis";
+import { createRedisClient, printRedisKeys } from "./redis";
+import { createRabbitChannel } from "./rabbit";
 
 const app = express();
 const port = 3000;
 
 async function connect() {
-  const connection = await amqp.connect("amqp://localhost");
-  const channel = await connection.createChannel();
-  const queue = "hello";
-  await channel.assertQueue(queue, { durable: false });
+  const redisClient: RedisClientType = await createRedisClient();
 
-  channel.consume(queue, (message) => {
+  const queue: string = "hello";
+  const rabbitChannel: Channel = await createRabbitChannel(queue);
+  rabbitChannel.consume(queue, (message) => {
     if (!message) throw new Error("Message failed");
-    channel.ack(message);
+    rabbitChannel.ack(message);
 
     const body: RabbitMessageBody = bytesToJson(message.content);
     console.log("percy: body: ", body);
+
+    if (body.contentType === "application/json") {
+      redisClient.set(body.username, JSON.stringify(body.content));
+    }
+    printRedisKeys(redisClient);
   });
 
   app.get("/", (req: Request, res: Response) => {
