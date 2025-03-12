@@ -72,7 +72,8 @@ public class ClientController {
       throws BadRequestException {
 
     jwtUtil.validateJwt(authorizationHeader, username);
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    rabbitDao.publish(username, file);
+    return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
   @PostMapping(
@@ -86,8 +87,7 @@ public class ClientController {
       throws BadRequestException {
 
     jwtUtil.validateJwt(authorizationHeader, username);
-    System.out.println("percy: brief: " + brief.toString());
-    rabbitDao.publishString("asdf");
-    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    rabbitDao.publish(username, brief);
+    return new ResponseEntity<>(HttpStatus.CREATED);
   }
 }
