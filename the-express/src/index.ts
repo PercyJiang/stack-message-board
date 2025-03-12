@@ -12,9 +12,9 @@ async function connect() {
   // redis
   const redisClient: RedisClientType = createClient({
     username: "default",
-    password: "UGZpEMCrRSUOk7KrfbVhq70gqHcB80n8",
+    password: "asdf",
     socket: {
-      host: "redis-17506.c8.us-east-1-2.ec2.redns.redis-cloud.com",
+      host: "asdf",
       port: 17506,
     },
   });
