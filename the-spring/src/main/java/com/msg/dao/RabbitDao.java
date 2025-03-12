@@ -8,7 +8,6 @@ import com.rabbitmq.client.ConnectionFactory;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
