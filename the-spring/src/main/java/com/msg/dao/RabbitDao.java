@@ -8,13 +8,15 @@ import com.rabbitmq.client.ConnectionFactory;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class RabbitDao {
 
-  private static final String QUEUE_NAME = "hello";
+  private static final String QUEUE_NAME = "percy_rabbit_queue";
 
   public void publish(String username, Object message) {
     ConnectionFactory factory = new ConnectionFactory();
@@ -28,13 +30,13 @@ public class RabbitDao {
       String contentType;
       Object content;
       if (message instanceof String) {
-        contentType = "text/plain";
+        contentType = MediaType.TEXT_PLAIN_VALUE;
         content = message.toString();
       } else if (message instanceof MultipartFile) {
-        contentType = ((MultipartFile) message).getContentType();
+        contentType = MediaType.IMAGE_JPEG_VALUE;
         content = ((MultipartFile) message).getBytes();
       } else {
-        contentType = "application/json";
+        contentType = MediaType.APPLICATION_JSON_VALUE;
         content = message;
       }
 

@@ -72,7 +72,9 @@ public class ClientController {
       throws BadRequestException {
 
     jwtUtil.validateJwt(authorizationHeader, username);
-    rabbitDao.publish(username, file);
+    if (System.getenv("USE_RABBITMQ").equals("true")) {
+      rabbitDao.publish(username, file);
+    }
     return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
@@ -87,7 +89,9 @@ public class ClientController {
       throws BadRequestException {
 
     jwtUtil.validateJwt(authorizationHeader, username);
-    rabbitDao.publish(username, brief);
+    if (System.getenv("USE_RABBITMQ").equals("true")) {
+      rabbitDao.publish(username, brief);
+    }
     return new ResponseEntity<>(HttpStatus.CREATED);
   }
 }

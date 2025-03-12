@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "amqplib": "^0.10.5",
+    "minio": "^8.0.4",
     "redis": "^4.7.0"
   }
 }
