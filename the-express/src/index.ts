@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express";
 import amqp from "amqplib";
+import { RabbitMessageBody } from "./type";
+import { bytesToJson } from "./util";
 
 const app = express();
 const port = 3000;
@@ -11,9 +13,11 @@ async function connect() {
   await channel.assertQueue(queue, { durable: false });
 
   channel.consume(queue, (message) => {
-    if (!message) throw new Error("No message in the queue");
-    console.log(`Received: ${message.content.toString()}`);
+    if (!message) throw new Error("Message failed");
     channel.ack(message);
+
+    const body: RabbitMessageBody = bytesToJson(message.content);
+    console.log("percy: body: ", body);
   });
 
   app.get("/", (req: Request, res: Response) => {

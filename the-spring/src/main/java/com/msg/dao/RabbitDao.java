@@ -5,13 +5,11 @@ import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class RabbitDao {
@@ -28,17 +26,16 @@ public class RabbitDao {
       BasicProperties props = new BasicProperties.Builder().contentType("application/json").build();
 
       String contentType;
-      byte[] contentBytes;
+      Object content;
       if (message instanceof String) {
-        contentBytes = message.toString().getBytes();
         contentType = "text/plain";
+        content = message.toString();
       } else if (message instanceof MultipartFile) {
-        contentBytes = ((MultipartFile) message).getBytes();
         contentType = ((MultipartFile) message).getContentType();
+        content = ((MultipartFile) message).getBytes();
       } else {
-        contentBytes =
-            new ObjectMapper().writeValueAsString(message).getBytes(StandardCharsets.UTF_8);
         contentType = "application/json";
+        content = message;
       }
 
       Map<String, Object> body =
@@ -46,29 +43,17 @@ public class RabbitDao {
               Map.of(
                   "username",
                   username,
-                  "contentBytes",
-                  contentBytes,
                   "contentType",
-                  Objects.requireNonNull(contentType)));
-      byte[] bodyBytes = convertMapToBytes(body);
+                  Objects.requireNonNull(contentType),
+                  "content",
+                  content));
 
-      channel.basicPublish("", QUEUE_NAME, props, bodyBytes);
+      String json = new ObjectMapper().writeValueAsString(body);
+      channel.basicPublish("", QUEUE_NAME, props, json.getBytes());
       System.out.println("percy: rabbit message published");
 
     } catch (Exception e) {
       System.out.println("percy: e: " + e.getMessage());
     }
-  }
-
-  private static byte[] convertMapToBytes(Map<String, Object> data) {
-    // Simple serialization - consider using a library like Jackson for more complex objects
-    StringBuilder sb = new StringBuilder();
-    for (Map.Entry<String, Object> entry : data.entrySet()) {
-      sb.append(entry.getKey()).append(":").append(entry.getValue().toString()).append(",");
-    }
-    if (!sb.isEmpty()) {
-      sb.deleteCharAt(sb.length() - 1); // Remove the trailing comma
-    }
-    return sb.toString().getBytes();
   }
 }
