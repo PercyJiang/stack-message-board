@@ -1,7 +1,7 @@
 package com.msg.api;
 
+import com.msg.dao.MessageRepository;
 import com.msg.dto.Message;
-import com.msg.service.MessageService;
 import com.msg.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Messages")
 public class MessageController {
 
-  private final MessageService messageService;
+  private final MessageRepository messageRepository;
   private final JwtUtil jwtUtil;
 
   @Autowired
-  public MessageController(MessageService messageService, JwtUtil jwtUtil) {
-    this.messageService = messageService;
+  public MessageController(MessageRepository messageRepository, JwtUtil jwtUtil) {
+    this.messageRepository = messageRepository;
     this.jwtUtil = jwtUtil;
   }
 
@@ -37,8 +37,9 @@ public class MessageController {
   public ResponseEntity<List<Message>> getAll(
       @RequestHeader("Authorization") String authorizationHeader, @PathVariable String username)
       throws BadRequestException {
+
     jwtUtil.validateJwt(authorizationHeader, username);
-    List<Message> response = messageService.getAll();
+    List<Message> response = messageRepository.getAll();
     return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
@@ -53,8 +54,9 @@ public class MessageController {
       @PathVariable String username,
       @RequestBody String content)
       throws BadRequestException {
+
     jwtUtil.validateJwt(authorizationHeader, username);
-    int result = messageService.create(username, content);
+    int result = messageRepository.create(username, content);
     return result == 1
         ? new ResponseEntity<>(HttpStatus.CREATED)
         : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -72,8 +74,9 @@ public class MessageController {
       @PathVariable UUID id,
       @RequestBody String content)
       throws BadRequestException {
+
     jwtUtil.validateJwt(authorizationHeader, username);
-    int result = messageService.update(username, id, content);
+    int result = messageRepository.update(username, id, content);
     return result == 1
         ? new ResponseEntity<>(HttpStatus.ACCEPTED)
         : new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -88,8 +91,9 @@ public class MessageController {
       @PathVariable String username,
       @PathVariable UUID id)
       throws BadRequestException {
+
     jwtUtil.validateJwt(authorizationHeader, username);
-    int result = messageService.delete(username, id);
+    int result = messageRepository.delete(username, id);
     return result == 1
         ? new ResponseEntity<>(HttpStatus.ACCEPTED)
         : new ResponseEntity<>(HttpStatus.NOT_FOUND);

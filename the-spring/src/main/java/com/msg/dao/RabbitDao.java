@@ -1,12 +1,11 @@
 package com.msg.dao;
 
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
-import org.springframework.stereotype.Component;
-
 import java.nio.charset.StandardCharsets;
+import org.springframework.stereotype.Component;
 
 @Component
 public class RabbitDao {
