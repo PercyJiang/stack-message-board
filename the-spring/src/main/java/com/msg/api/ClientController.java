@@ -1,6 +1,7 @@
 package com.msg.api;
 
 import com.msg.dao.ClientRepository;
+import com.msg.dao.RabbitDao;
 import com.msg.dto.Client;
 import com.msg.util.JwtUtil;
 import org.apache.coyote.BadRequestException;
@@ -19,11 +20,13 @@ public class ClientController {
 
   private final ClientRepository clientRepository;
   private final JwtUtil jwtUtil;
+  private final RabbitDao rabbitDao;
 
   @Autowired
-  public ClientController(ClientRepository clientRepository, JwtUtil jwtUtil) {
+  public ClientController(ClientRepository clientRepository, JwtUtil jwtUtil, RabbitDao rabbitDao) {
     this.clientRepository = clientRepository;
     this.jwtUtil = jwtUtil;
+    this.rabbitDao = rabbitDao;
   }
 
   @PostMapping(
@@ -84,6 +87,7 @@ public class ClientController {
 
     jwtUtil.validateJwt(authorizationHeader, username);
     System.out.println("percy: brief: " + brief.toString());
+    rabbitDao.publishString("asdf");
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }
